@@ -8,6 +8,7 @@ The game also has RPG elements with an upgrade panel, when level up, showing 3 r
 The game has 5 weapons and 6 attributes upgrades also with a variety of enemies, including 6 mob types and 1 boss to kill the player at the end (300-second mark).
 
 Installation Instructions
+
 0. Open and download the file in the link: https://drive.google.com/file/d/15sV0nyCQR8_ySj3THsjJbKE5cmv1ouxs/view?usp=sharing
 1. Unzip the file “TEJ_TheGame_tanghoa.zip”.
 2. Open the unzipped folder “TEJ The Game”.
