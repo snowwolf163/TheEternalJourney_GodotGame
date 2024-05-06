@@ -1,0 +1,132 @@
+[gd_scene load_steps=25 format=3 uid="uid://rpu7sg6rktl5"]
+
+[ext_resource type="Texture2D" uid="uid://d15y0lgs3jy5k" path="res://Assets/Background/Large 1024x1024/Blue Nebula/Blue_Nebula_01-1024x1024.png" id="1_r4qni"]
+[ext_resource type="PackedScene" uid="uid://cisg0hedvklrc" path="res://scenes/player.tscn" id="2_s6m14"]
+[ext_resource type="PackedScene" uid="uid://bvbblpf2fpvt7" path="res://scenes/void_jelly_weak.tscn" id="3_bn58f"]
+[ext_resource type="PackedScene" uid="uid://qejt4kc7btkl" path="res://scenes/EnemySpawner.tscn" id="3_tjjhh"]
+[ext_resource type="Script" path="res://scripts/spawn_info.gd" id="4_3502u"]
+[ext_resource type="PackedScene" uid="uid://cv22l2j6kxow3" path="res://scenes/Experience.tscn" id="6_hjg2t"]
+[ext_resource type="PackedScene" uid="uid://d2jl24qnkwel4" path="res://scenes/void_floating_skull_weak.tscn" id="6_lr4ep"]
+[ext_resource type="PackedScene" uid="uid://c05mqqqal7jpk" path="res://scenes/void_floating_skull_strong.tscn" id="7_onw54"]
+[ext_resource type="PackedScene" uid="uid://cw0krttl12eeg" path="res://scenes/void_floating_wizard.tscn" id="8_nnejh"]
+[ext_resource type="PackedScene" uid="uid://vvoad1wwvavy" path="res://scenes/void_death_boss.tscn" id="8_xrto2"]
+[ext_resource type="PackedScene" uid="uid://dyfe6gjj4vovc" path="res://scenes/void_floating_skull_super.tscn" id="9_cwvo7"]
+[ext_resource type="AudioStream" uid="uid://b61mypp16mm86" path="res://Assets/SFX/8-bit-air-fight-158813.mp3" id="11_bjq1j"]
+[ext_resource type="Script" path="res://scripts/ingame_theme.gd" id="12_odntb"]
+
+[sub_resource type="Resource" id="Resource_oipit"]
+script = ExtResource("4_3502u")
+time_start = 0
+time_end = 150
+enemy = ExtResource("3_bn58f")
+enemy_num = 1
+enemy_spawn_delay = 0
+
+[sub_resource type="Resource" id="Resource_uenm7"]
+script = ExtResource("4_3502u")
+time_start = 5
+time_end = 35
+enemy = ExtResource("3_bn58f")
+enemy_num = 2
+enemy_spawn_delay = 0
+
+[sub_resource type="Resource" id="Resource_ntkhy"]
+script = ExtResource("4_3502u")
+time_start = 25
+time_end = 200
+enemy = ExtResource("6_lr4ep")
+enemy_num = 1
+enemy_spawn_delay = 0
+
+[sub_resource type="Resource" id="Resource_yic1e"]
+script = ExtResource("4_3502u")
+time_start = 45
+time_end = 90
+enemy = ExtResource("6_lr4ep")
+enemy_num = 2
+enemy_spawn_delay = 0
+
+[sub_resource type="Resource" id="Resource_84mgc"]
+script = ExtResource("4_3502u")
+time_start = 60
+time_end = 250
+enemy = ExtResource("7_onw54")
+enemy_num = 1
+enemy_spawn_delay = 0
+
+[sub_resource type="Resource" id="Resource_oe55b"]
+script = ExtResource("4_3502u")
+time_start = 95
+time_end = 120
+enemy = ExtResource("7_onw54")
+enemy_num = 2
+enemy_spawn_delay = 0
+
+[sub_resource type="Resource" id="Resource_ckaf1"]
+script = ExtResource("4_3502u")
+time_start = 100
+time_end = 300
+enemy = ExtResource("8_nnejh")
+enemy_num = 1
+enemy_spawn_delay = 0
+
+[sub_resource type="Resource" id="Resource_lptmd"]
+script = ExtResource("4_3502u")
+time_start = 120
+time_end = 180
+enemy = ExtResource("8_nnejh")
+enemy_num = 2
+enemy_spawn_delay = 0
+
+[sub_resource type="Resource" id="Resource_46td8"]
+script = ExtResource("4_3502u")
+time_start = 220
+time_end = 280
+enemy = ExtResource("8_nnejh")
+enemy_num = 2
+enemy_spawn_delay = 0
+
+[sub_resource type="Resource" id="Resource_xscch"]
+script = ExtResource("4_3502u")
+time_start = 200
+time_end = 300
+enemy = ExtResource("9_cwvo7")
+enemy_num = 1
+enemy_spawn_delay = 0
+
+[sub_resource type="Resource" id="Resource_2wg82"]
+script = ExtResource("4_3502u")
+time_start = 300
+time_end = 301
+enemy = ExtResource("8_xrto2")
+enemy_num = 1
+enemy_spawn_delay = 1
+
+[node name="main" type="Node2D"]
+
+[node name="Background" type="Sprite2D" parent="."]
+texture_repeat = 2
+position = Vector2(513, 513)
+texture = ExtResource("1_r4qni")
+region_enabled = true
+region_rect = Rect2(-30000, -30000, 30000, 30000)
+
+[node name="player" parent="." instance=ExtResource("2_s6m14")]
+
+[node name="EnemySpawner" parent="." instance=ExtResource("3_tjjhh")]
+spawns = Array[ExtResource("4_3502u")]([SubResource("Resource_oipit"), SubResource("Resource_uenm7"), SubResource("Resource_ntkhy"), SubResource("Resource_yic1e"), SubResource("Resource_84mgc"), SubResource("Resource_oe55b"), SubResource("Resource_ckaf1"), SubResource("Resource_lptmd"), SubResource("Resource_46td8"), SubResource("Resource_xscch"), SubResource("Resource_2wg82")])
+
+[node name="Loot" type="Node2D" parent="." groups=["loot"]]
+
+[node name="Experience" parent="Loot" instance=ExtResource("6_hjg2t")]
+position = Vector2(92, -87)
+exp = 14
+
+[node name="snd_ingame_music" type="AudioStreamPlayer" parent="."]
+process_mode = 3
+stream = ExtResource("11_bjq1j")
+volume_db = -20.0
+autoplay = true
+script = ExtResource("12_odntb")
+
+[connection signal="playerdeath" from="player" to="snd_ingame_music" method="_on_player_playerdeath"]

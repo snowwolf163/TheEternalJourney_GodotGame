@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://rpu7sg6rktl5"]
+
+[ext_resource type="Texture2D" uid="uid://d15y0lgs3jy5k" path="res://Assets/Background/Large 1024x1024/Blue Nebula/Blue_Nebula_01-1024x1024.png" id="1_r4qni"]
+[ext_resource type="PackedScene" uid="uid://cisg0hedvklrc" path="res://scenes/player.tscn" id="2_s6m14"]
+
+[node name="main" type="Node2D"]
+
+[node name="Background" type="Sprite2D" parent="."]
+texture_repeat = 2
+position = Vector2(513, 513)
+texture = ExtResource("1_r4qni")
+region_enabled = true
+region_rect = Rect2(-30000, -30000, 30000, 30000)
+
+[node name="player" parent="." instance=ExtResource("2_s6m14")]
+
+[node name="Camera2D" type="Camera2D" parent="player"]

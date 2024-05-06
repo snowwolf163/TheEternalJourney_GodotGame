@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://qsx0506ivm8f"]
+
+[ext_resource type="Texture2D" uid="uid://b4tp51xbjib2d" path="res://Assets/Attacks/Drones/Spaceship Pack/missile.png" id="1_1r3qb"]
+[ext_resource type="Script" path="res://scripts/missile.gd" id="1_t27wt"]
+[ext_resource type="AudioStream" uid="uid://de5t55ngb43an" path="res://Assets/SFX/missile-blast-2-95177.mp3" id="3_7p5tk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vxhbi"]
+size = Vector2(7, 10)
+
+[node name="Missile" type="Area2D" groups=["attack"]]
+top_level = true
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_t27wt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_vxhbi")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_1r3qb")
+hframes = 2
+frame = 1
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[node name="snd_play" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_7p5tk")
+volume_db = -30.0
+pitch_scale = 1.5
+autoplay = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="finished" from="snd_play" to="." method="_on_snd_play_finished"]

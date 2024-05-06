@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=3 uid="uid://cciqix1gd6w17"]
+
+[ext_resource type="Texture2D" uid="uid://cammtj1ktfdu0" path="res://Assets/Spaceship/2D ship/Foozle_2DS0011_Void_MainShip/Main Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Idle.png" id="1_eqwdi"]
+[ext_resource type="Script" path="res://scripts/engine.gd" id="1_r7ygv"]
+
+[sub_resource type="Animation" id="Animation_u2pqp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_ohuw6"]
+resource_name = "jump"
+length = 0.8
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xg8pl"]
+_data = {
+"RESET": SubResource("Animation_u2pqp"),
+"jump": SubResource("Animation_ohuw6")
+}
+
+[node name="engine" type="Area2D"]
+script = ExtResource("1_r7ygv")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_eqwdi")
+hframes = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_xg8pl")
+}
+
+[node name="jumpTimer" type="Timer" parent="."]

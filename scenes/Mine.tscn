@@ -1,0 +1,89 @@
+[gd_scene load_steps=9 format=3 uid="uid://wfd71b0htj2p"]
+
+[ext_resource type="Script" path="res://scripts/mine.gd" id="1_208qf"]
+[ext_resource type="Texture2D" uid="uid://br566rw4p7yki" path="res://Assets/Attacks/Spaceship-shooter-gamekit/Spaceship-shooter-gamekit/spritesheets/power-up.png" id="2_6nnxr"]
+[ext_resource type="Texture2D" uid="uid://8fs0jhk1nx34" path="res://Assets/Attacks/Spaceship-shooter-gamekit/Spaceship-shooter-gamekit/spritesheets/explosion.png" id="3_2sryn"]
+[ext_resource type="AudioStream" uid="uid://t4yq4feje62i" path="res://Assets/SFX/small-explosion-103779.mp3" id="4_8bwo6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_03ogw"]
+radius = 3.33333
+
+[sub_resource type="Animation" id="Animation_ko7eg"]
+resource_name = "exploding"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Explode:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+
+[sub_resource type="Animation" id="Animation_6us7v"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Explode:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_w6ght"]
+_data = {
+"RESET": SubResource("Animation_6us7v"),
+"exploding": SubResource("Animation_ko7eg")
+}
+
+[node name="Mine" type="Area2D" groups=["attack"]]
+show_behind_parent = true
+top_level = true
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_208qf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+scale = Vector2(1.5, 1.5)
+shape = SubResource("CircleShape2D_03ogw")
+
+[node name="MineSprite" type="Sprite2D" parent="." groups=["attack"]]
+position = Vector2(0, -1)
+rotation = -1.5708
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_6nnxr")
+hframes = 2
+vframes = 2
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 30.0
+one_shot = true
+autostart = true
+
+[node name="Explode" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, -1)
+texture = ExtResource("3_2sryn")
+hframes = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_w6ght")
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_8bwo6")
+volume_db = -20.0
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="finished" from="AudioStreamPlayer" to="." method="_on_audio_stream_player_finished"]

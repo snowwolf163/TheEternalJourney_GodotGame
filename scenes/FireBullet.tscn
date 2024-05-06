@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://3phd3ql684pm"]
+
+[ext_resource type="Script" path="res://scripts/fire_bullet.gd" id="1_5o5ay"]
+[ext_resource type="Texture2D" uid="uid://ca7x06bb2dd1m" path="res://Assets/Attacks/Bullets/Laser Sprites/02.png" id="2_n0fsp"]
+[ext_resource type="AudioStream" uid="uid://dxb1651pjdk4f" path="res://Assets/SFX/laser_bullet.mp3" id="3_h8yhd"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8ytsx"]
+radius = 5.0
+height = 12.0
+
+[node name="FireBullet" type="Area2D" groups=["attack"]]
+top_level = true
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_5o5ay")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(1.5, 1.5)
+shape = SubResource("CapsuleShape2D_8ytsx")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -1)
+rotation = -1.5708
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_n0fsp")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[node name="snd_play" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_h8yhd")
+volume_db = -30.0
+pitch_scale = 3.0
+autoplay = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="finished" from="snd_play" to="." method="_on_snd_play_finished"]

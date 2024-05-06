@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://rpu7sg6rktl5"]
+
+[ext_resource type="Texture2D" uid="uid://d15y0lgs3jy5k" path="res://Assets/Background/Large 1024x1024/Blue Nebula/Blue_Nebula_01-1024x1024.png" id="1_r4qni"]
+[ext_resource type="PackedScene" uid="uid://5k1ah16sew68" path="res://scenes/player.tscn" id="2_s6m14"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="3_n3lpc"]
+
+[node name="main" type="Node2D"]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 1024.0
+offset_bottom = 1024.0
+texture = ExtResource("1_r4qni")
+
+[node name="player" parent="." instance=ExtResource("2_s6m14")]
+position = Vector2(521, 579)
+script = ExtResource("3_n3lpc")
+
+[node name="Camera2D" type="Camera2D" parent="player"]

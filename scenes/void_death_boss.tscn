@@ -1,0 +1,102 @@
+[gd_scene load_steps=10 format=3 uid="uid://vvoad1wwvavy"]
+
+[ext_resource type="Script" path="res://scripts/void_jelly_weak.gd" id="1_bppbl"]
+[ext_resource type="Texture2D" uid="uid://dgbx6c0rw57d0" path="res://Assets/Enemy/spr_enemy_finalboss_flying_strip6_flip.png" id="2_qr2jq"]
+[ext_resource type="PackedScene" uid="uid://cihch7c0v4huv" path="res://scenes/hurtbox.tscn" id="3_g7fkp"]
+[ext_resource type="PackedScene" uid="uid://b7l8runalvoaq" path="res://scenes/hitbox.tscn" id="4_e4x04"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g0t64"]
+radius = 25.4733
+
+[sub_resource type="Animation" id="Animation_ksr6q"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_80slp"]
+resource_name = "float"
+length = 1.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_04w7h"]
+_data = {
+"RESET": SubResource("Animation_ksr6q"),
+"float": SubResource("Animation_80slp")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jvek4"]
+radius = 50.8402
+
+[node name="void_death_boss" type="CharacterBody2D"]
+scale = Vector2(0.8, 0.8)
+collision_layer = 5
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("1_bppbl")
+mov_speed = 200
+hp = 99999
+exp = 100
+enemy_damage = 20
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(8, -3)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_qr2jq")
+hframes = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(50, -17.5)
+scale = Vector2(1.5, 1.5)
+shape = SubResource("CircleShape2D_g0t64")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_04w7h")
+}
+
+[node name="hurtbox" parent="." instance=ExtResource("3_g7fkp")]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionPolygon2D" parent="hurtbox" index="0"]
+visible = false
+position = Vector2(61.25, 0)
+scale = Vector2(1.5, 1.5)
+polygon = PackedVector2Array(-0.833332, -54.1667, -34.1667, -46.6667, -50.6667, -47.3333, -64.1667, -35, -96.6667, -15.8333, -44.1667, 63.3333, -27.5, 73.3333, -6.66667, 74.1667, 28.3333, 53.3333, 25, 15.8333, 27.5, -6.66667, 22.5, -42.5)
+
+[node name="hitbox" parent="." instance=ExtResource("4_e4x04")]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" parent="hitbox" index="0"]
+visible = false
+position = Vector2(26.25, 3.75)
+scale = Vector2(1.5, 1.5)
+shape = SubResource("CircleShape2D_jvek4")
+
+[connection signal="hurt" from="hurtbox" to="." method="_on_hurtbox_hurt"]
+
+[editable path="hurtbox"]
+[editable path="hitbox"]

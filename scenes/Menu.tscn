@@ -1,0 +1,43 @@
+[gd_scene load_steps=3 format=3 uid="uid://cjpnqiiuyqfr3"]
+
+[ext_resource type="Script" path="res://scripts/menu.gd" id="1_30gdt"]
+[ext_resource type="PackedScene" uid="uid://duwp32f2uyi4a" path="res://scenes/basic_button.tscn" id="1_dxi5n"]
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_30gdt")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1167.0
+offset_bottom = 663.0
+color = Color(0.298039, 0.25098, 0.643137, 1)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 100.0
+theme_override_font_sizes/font_size = 72
+text = "The Eternal Journey"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="btn_play" parent="." instance=ExtResource("1_dxi5n")]
+layout_mode = 0
+offset_left = 516.0
+offset_top = 450.0
+offset_right = 636.0
+offset_bottom = 510.0
+text = "PLAY"
+
+[node name="btn_exit" parent="." instance=ExtResource("1_dxi5n")]
+layout_mode = 0
+offset_left = 516.0
+offset_top = 525.0
+offset_right = 636.0
+offset_bottom = 585.0
+text = "EXIT"
+
+[connection signal="click_end" from="btn_play" to="." method="_on_btn_play_click_end"]
+[connection signal="click_end" from="btn_exit" to="." method="_on_btn_exit_click_end"]

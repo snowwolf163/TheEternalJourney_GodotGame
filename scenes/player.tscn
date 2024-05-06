@@ -1,0 +1,322 @@
+[gd_scene load_steps=17 format=3 uid="uid://cisg0hedvklrc"]
+
+[ext_resource type="Texture2D" uid="uid://bsi42yxw5ycg2" path="res://Assets/Spaceship/2D ship/Foozle_2DS0011_Void_MainShip/Main Ship/Main Ship - Bases/PNGs/Main Ship - Base - Full health.png" id="1_jpfot"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_rlisu"]
+[ext_resource type="PackedScene" uid="uid://cciqix1gd6w17" path="res://scenes/engine.tscn" id="4_wu8kd"]
+[ext_resource type="PackedScene" uid="uid://cihch7c0v4huv" path="res://scenes/hurtbox.tscn" id="5_l7g6k"]
+[ext_resource type="Texture2D" uid="uid://coft41wafl0ar" path="res://Assets/UI/exp_background.png" id="6_n51eg"]
+[ext_resource type="Texture2D" uid="uid://iwmtgv3vd2dh" path="res://Assets/UI/exp_progress.png" id="7_gruq2"]
+[ext_resource type="AudioStream" uid="uid://5i2gm4cr2dgw" path="res://Assets/SFX/levelup.ogg" id="8_ac4yr"]
+[ext_resource type="FontFile" uid="uid://cq1yhrl1xw48d" path="res://Assets/Font/tenderness.otf" id="8_go83u"]
+[ext_resource type="Texture2D" uid="uid://bionjqy2l5x72" path="res://Assets/UI/healthbar.png" id="10_bxbr8"]
+[ext_resource type="Texture2D" uid="uid://dvk24wirl65vu" path="res://Assets/UI/health.png" id="11_bw7en"]
+[ext_resource type="AudioStream" uid="uid://c8n3qdsm7ndg8" path="res://Assets/SFX/Victory.wav" id="12_a4ssl"]
+[ext_resource type="AudioStream" uid="uid://5spgvcgh0o6q" path="res://Assets/SFX/Lose.ogg" id="13_n8u47"]
+[ext_resource type="PackedScene" uid="uid://duwp32f2uyi4a" path="res://scenes/basic_button.tscn" id="14_3jbrl"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7c2v2"]
+radius = 441.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5cqlx"]
+radius = 50.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gpnkm"]
+
+[node name="player" type="CharacterBody2D" groups=["player"]]
+motion_mode = 1
+script = ExtResource("1_rlisu")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_jpfot")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(1.5, 1.5)
+position_smoothing_enabled = true
+rotation_smoothing_enabled = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+visible = false
+polygon = PackedVector2Array(-14, 5, -5, -4, -3, -9, 0, -13, 3, -9, 5, -4, 14, 5, 14, 10, 3, 5, 2, 12, -2, 12, -3, 5, -14, 10)
+
+[node name="HeadofShip" type="Marker2D" parent="."]
+position = Vector2(0, -20)
+
+[node name="TailofShip" type="Marker2D" parent="."]
+position = Vector2(0, 19)
+
+[node name="engine" parent="." instance=ExtResource("4_wu8kd")]
+position = Vector2(0, 5)
+
+[node name="hurtbox" parent="." instance=ExtResource("5_l7g6k")]
+collision_layer = 2
+collision_mask = 2
+HurtBoxType = 2
+
+[node name="CollisionPolygon2D" parent="hurtbox" index="0"]
+polygon = PackedVector2Array(0, -14, -3, -9, -5, -4, -14, 5, -14, 10, -6, 6, -3, 6, -2, 12, 2, 12, 2, 6, 5, 6, 14, 10, 14, 5, 5, -4, 3, -9)
+
+[node name="Attack" type="Node2D" parent="."]
+
+[node name="MissileTimer" type="Timer" parent="Attack"]
+unique_name_in_owner = true
+wait_time = 1.5
+
+[node name="MissileAttackTimer" type="Timer" parent="Attack/MissileTimer"]
+unique_name_in_owner = true
+wait_time = 0.075
+
+[node name="EnergyBallTimer" type="Timer" parent="Attack"]
+unique_name_in_owner = true
+wait_time = 3.0
+
+[node name="EnergyBallAttackTimer" type="Timer" parent="Attack/EnergyBallTimer"]
+unique_name_in_owner = true
+wait_time = 0.2
+
+[node name="FireBulletTimer" type="Timer" parent="Attack"]
+unique_name_in_owner = true
+
+[node name="FireBulletAttackTimer" type="Timer" parent="Attack/FireBulletTimer"]
+unique_name_in_owner = true
+
+[node name="IceBulletTimer" type="Timer" parent="Attack"]
+unique_name_in_owner = true
+
+[node name="IceBulletAttackTimer" type="Timer" parent="Attack/IceBulletTimer"]
+unique_name_in_owner = true
+
+[node name="MineTimer" type="Timer" parent="Attack"]
+unique_name_in_owner = true
+
+[node name="MineAttackTimer" type="Timer" parent="Attack/MineTimer"]
+unique_name_in_owner = true
+
+[node name="EnemyDetectionArea" type="Area2D" parent="."]
+visible = false
+collision_layer = 4
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyDetectionArea"]
+shape = SubResource("CircleShape2D_7c2v2")
+
+[node name="GrabArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GrabArea"]
+shape = SubResource("CircleShape2D_5cqlx")
+
+[node name="CollectArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollectArea"]
+shape = SubResource("CircleShape2D_gpnkm")
+
+[node name="GUILayer" type="CanvasLayer" parent="."]
+
+[node name="GUI" type="Control" parent="GUILayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 360.0
+
+[node name="ExpBar" type="TextureProgressBar" parent="GUILayer/GUI"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 48.0
+texture_under = ExtResource("6_n51eg")
+texture_progress = ExtResource("7_gruq2")
+
+[node name="lbl_level" type="Label" parent="GUILayer/GUI/ExpBar"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 20.0
+theme_override_font_sizes/font_size = 12
+text = "   Level: 1"
+vertical_alignment = 1
+
+[node name="HealthBar" type="TextureProgressBar" parent="GUILayer/GUI"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 545.0
+offset_top = 60.0
+offset_right = 577.0
+offset_bottom = 68.0
+scale = Vector2(2, 2)
+value = 100.0
+texture_over = ExtResource("10_bxbr8")
+texture_progress = ExtResource("11_bw7en")
+
+[node name="LevelUp" type="Panel" parent="GUILayer/GUI"]
+unique_name_in_owner = true
+process_mode = 2
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 60.0
+offset_top = -90.0
+offset_right = 260.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.1, 0.1)
+
+[node name="lbl_lvlup" type="Label" parent="GUILayer/GUI/LevelUp"]
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 50.0
+theme_override_fonts/font = ExtResource("8_go83u")
+text = "Level Up!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UpgradeOption" type="VBoxContainer" parent="GUILayer/GUI/LevelUp"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 10.0
+offset_top = 50.2431
+offset_right = 190.0
+offset_bottom = 105.243
+
+[node name="snd_levelup" type="AudioStreamPlayer" parent="GUILayer/GUI/LevelUp"]
+unique_name_in_owner = true
+stream = ExtResource("8_ac4yr")
+volume_db = -20.0
+pitch_scale = 0.8
+
+[node name="DeathPanel" type="Panel" parent="GUILayer/GUI"]
+unique_name_in_owner = true
+process_mode = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 155.0
+offset_top = -480.0
+offset_right = 355.0
+offset_bottom = -230.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="lbl_result" type="Label" parent="GUILayer/GUI/DeathPanel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 50.0
+theme_override_fonts/font = ExtResource("8_go83u")
+text = "RESULT"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="snd_victory" type="AudioStreamPlayer" parent="GUILayer/GUI/DeathPanel"]
+unique_name_in_owner = true
+stream = ExtResource("12_a4ssl")
+volume_db = -20.0
+
+[node name="snd_lose" type="AudioStreamPlayer" parent="GUILayer/GUI/DeathPanel"]
+unique_name_in_owner = true
+stream = ExtResource("13_n8u47")
+volume_db = -20.0
+pitch_scale = 0.5
+
+[node name="button_menu" parent="GUILayer/GUI/DeathPanel" instance=ExtResource("14_3jbrl")]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 200.0
+offset_right = 140.0
+offset_bottom = 231.0
+text = "Menu"
+
+[node name="Score" type="Label" parent="GUILayer/GUI/DeathPanel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 50.0
+offset_top = 75.0
+offset_right = 150.0
+offset_bottom = 101.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Rating" type="Label" parent="GUILayer/GUI/DeathPanel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 50.0
+offset_top = 135.0
+offset_right = 150.0
+offset_bottom = 161.0
+text = "Bad
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="lblTimer" type="Label" parent="GUILayer/GUI"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 537.5
+offset_top = 20.0
+offset_right = 617.5
+offset_bottom = 46.0
+text = "00:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CollectedWeapons" type="GridContainer" parent="GUILayer/GUI"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 8.0
+offset_top = 24.0
+offset_right = 208.0
+offset_bottom = 64.0
+columns = 10
+
+[node name="CollectedUpgrades" type="GridContainer" parent="GUILayer/GUI"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 8.0
+offset_top = 65.0
+offset_right = 208.0
+offset_bottom = 105.0
+columns = 10
+
+[node name="HowToPlay" type="Label" parent="GUILayer/GUI"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 937.0
+offset_top = 9.0
+offset_right = 1144.0
+offset_bottom = 87.0
+text = "WASD to control the ship
+Space to speed up the ship
+Ctrl to stop the ship"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[connection signal="hurt" from="hurtbox" to="." method="_on_hurtbox_hurt"]
+[connection signal="timeout" from="Attack/MissileTimer" to="." method="_on_missile_timer_timeout"]
+[connection signal="timeout" from="Attack/MissileTimer/MissileAttackTimer" to="." method="_on_missile_attack_timer_timeout"]
+[connection signal="timeout" from="Attack/EnergyBallTimer" to="." method="_on_energy_ball_timer_timeout"]
+[connection signal="timeout" from="Attack/EnergyBallTimer/EnergyBallAttackTimer" to="." method="_on_energy_ball_attack_timer_timeout"]
+[connection signal="timeout" from="Attack/FireBulletTimer" to="." method="_on_fire_bullet_timer_timeout"]
+[connection signal="timeout" from="Attack/FireBulletTimer/FireBulletAttackTimer" to="." method="_on_fire_bullet_attack_timer_timeout"]
+[connection signal="timeout" from="Attack/IceBulletTimer" to="." method="_on_ice_bullet_timer_timeout"]
+[connection signal="timeout" from="Attack/IceBulletTimer/IceBulletAttackTimer" to="." method="_on_ice_bullet_attack_timer_timeout"]
+[connection signal="timeout" from="Attack/MineTimer" to="." method="_on_mine_timer_timeout"]
+[connection signal="timeout" from="Attack/MineTimer/MineAttackTimer" to="." method="_on_mine_attack_timer_timeout"]
+[connection signal="body_entered" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_body_entered"]
+[connection signal="body_exited" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_body_exited"]
+[connection signal="area_entered" from="GrabArea" to="." method="_on_grab_area_area_entered"]
+[connection signal="area_entered" from="CollectArea" to="." method="_on_collect_area_area_entered"]
+[connection signal="click_end" from="GUILayer/GUI/DeathPanel/button_menu" to="." method="_on_button_menu_click_end"]
+
+[editable path="hurtbox"]
